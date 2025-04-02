@@ -1,1 +1,1971 @@
+<ButtonConf ButtonName="ATTA BOS UAE" Description="ATTA BOS UAE" QuickCommand="">
+  <!-- Content goes here... -->
+  <Variable VarName="PCC">%OriginPcc%</Variable>
+  <RunCommand ResponseAll="True" StandardCommand="True">*DI</RunCommand>
+  <GetString VarName="PNR_Cust_Code" Column="20" RowSearch="-CUST" Length="10" />
+  <GetString VarName="PNR_DEP" Column="20" RowSearch="-DEP" Length="10" />
+  <GetString VarName="isSDGFound" Column="19" RowSearch="-SDG" Length="10" />
+  <Variable VarName="temp_cust_code">[PNR_Cust_Code]</Variable>
+  <Variable VarName="isSBRFound">false</Variable>
+  <GetString VarName="PNR_DEP" Column="19" RowSearch="-DEP" Length="50" />
+  <Variable VarName="temp_DEP">[PNR_DEP]</Variable>
+  <GetString VarName="DEC" Column="19" RowSearch="-DEC" Length="50" />
+  <Variable VarName="temp_DEC">[DEC]</Variable>
+  <GetString VarName="EMP" Column="19" RowSearch="-EMP" Length="50" />
+  <Variable VarName="temp_EMP">[EMP]</Variable>
+  <GetString VarName="LPO1" Column="19" RowSearch="-LPO" Length="50" />
+  <Variable VarName="temp_LPO">[LPO1]</Variable>
+  <GetString VarName="CCT" Column="19" RowSearch="-CCT" Length="50" />
+  <Variable VarName="temp_CCT">[CCT]</Variable>
+  <GetString VarName="SET" Column="19" RowSearch="-SET" Length="50" />
+  <ConditionalAction Condition="PNR_Cust_Code==">
+    <True>
+      <ShowMessage>Cust Code is blank</ShowMessage>
+      <Exit />
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="[PNR_Cust_Code]!=AERG9ABY and [PNR_Cust_Code]!=AERCSAIP7 and [PNR_Cust_Code]!=AERCSAIP8 and [PNR_Cust_Code]!=AERCSAIP3 and [PNR_Cust_Code]!=QARCSAIP and [PNR_Cust_Code]!=OMRCSAIP1 and [PNR_Cust_Code]!=AERCSURV and [PNR_Cust_Code]!=AERCSURD and [PNR_Cust_Code]!=AERCCSM and [PNR_Cust_Code]!=AERCOMAN and [PNR_Cust_Code]!=AERCHITA and [PNR_Cust_Code]!=AERCPCM and [PNR_Cust_Code]!=AERCAPGS and [PNR_Cust_Code]!=AERCARTH and [PNR_Cust_Code]!=AERCSOFT and [PNR_Cust_Code]!=AERCCRS1 and [PNR_Cust_Code]!=AERCCRS2 and [PNR_Cust_Code]!=AERLCSHRTL and [PNR_Cust_Code]!=AERL74RTL and [PNR_Cust_Code]!=AERACMI and [PNR_Cust_Code]!=AERCAMER1 and [PNR_Cust_Code]!=AERCAMER2 and [PNR_Cust_Code]!=AERCAMER3 and [PNR_Cust_Code]!=BHRCASPE and [PNR_Cust_Code]!=OMRCASPE and [PNR_Cust_Code]!=BHRCTDL2 and [PNR_Cust_Code]!=OMRCTDL1 and [PNR_Cust_Code]!=QARCHITA and [PNR_Cust_Code]!=OMRETL and [PNR_Cust_Code]!=QARLQRTL and [PNR_Cust_Code]!=BHRRRETL and [PNR_Cust_Code]!=AERCPETR4 and [PNR_Cust_Code]!=AERCPETR6 and [PNR_Cust_Code]!=AERCPETR28 and [PNR_Cust_Code]!=KWRCPETR13 and [PNR_Cust_Code]!=OMRCPETR1 and [PNR_Cust_Code]!=OMRCPETR3 and [PNR_Cust_Code]!=AECZ30CB and [PNR_Cust_Code]!=AECZ35CB and [PNR_Cust_Code]!=AECZ44CB and [PNR_Cust_Code]!=AERLSTAF  and [PNR_Cust_Code]!=AERGG9MKT and [PNR_Cust_Code]!=AERG9OPER and  [PNR_Cust_Code]!=AERCEPAM11 and [PNR_Cust_Code]!=AERCEPAM22 and [PNR_Cust_Code]!=AERCEPAM33 and [PNR_Cust_Code]!=AERCEPAM44 and [PNR_Cust_Code]!=SARCACWA1">
+    <True>
+      <StringOperation Type="StringLength" VarName="str_length">
+        <Source>[temp_cust_code]</Source>
+      </StringOperation>
+      <ConditionalAction Condition="[str_length]&lt;6">
+        <True>
+          <ShowMessage>Customer Code([PNR_Cust_Code]) not meeting the minimum length criteria. Needs to be atleast 6 characters long!</ShowMessage>
+          <Exit />
+        </True>
+      </ConditionalAction>
+      <StringOperation Type="Substring" VarName="customerCountry" Source="[PNR_Cust_Code]">
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <QuestionsBlock WindowFormTitle="Common BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="211301ef-1306-4262-a250-58a18ea7ccb5" Designer="True">
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_4a92b5cc-01ba-4bca-9b20-fd2d63c8e32b" X="130" Y="30">Common Fields for all other Corps</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_0cf9220c-c7ae-44db-a976-0f6f73336c45" X="30" Y="80">Customer Code :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_5065d6fc-05ae-4f0d-8a09-630e3b51e3e6" X="30" Y="130">Purchase Order :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ee37b8dd-a02a-4d9f-9ecc-bee38996b482" X="30" Y="180">Service Fee :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_831fa10d-f4b0-4af3-a070-86b6ac3a2187" X="270" Y="180">Extra Collection :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4b28fc22-51e7-4e7a-b78d-3d294d24ef27" X="290" Y="130">Booked  by :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="80">[temp_cust_code]</TextBox>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="1" X="130" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="370" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="service_fee_sc1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="3" X="130" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12345)" TabIndex="4" X="370" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="477" Height="213" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_2129a6ba-aa8d-4e95-8bd7-c3a577ecb2dd" X="10" Y="10" />
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="5" IsSelected="True" X="370" Y="80" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="IsNotEmpty" Value="" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="inv_yes_no" FieldType="CheckBox" Action="Hide">
+            <WhenCondition ConditionNumber="1" FieldName="customer_code_cust" FieldType="TextBox" FieldProperty="Value" FieldOperator="Equals" Value="AERCPFAE" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="customer_code_cust" FieldType="TextBox" FieldProperty="Value" FieldOperator="Equals" Value="AERCPFAE2" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <ConditionalAction Condition="[customerCountry]==SA">
+        <True>
+          <ArithmeticalOperation VarName="ec1" DecimalDigit="2">(([extra_collection_ec1]) /1.15)</ArithmeticalOperation>
+        </True>
+        <False>
+          <ArithmeticalOperation VarName="ec1" DecimalDigit="2">(([extra_collection_ec1]) /1)</ArithmeticalOperation>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[service_fee_sc1]+DI.FT-EC1[ec1]</RunCommand>
+      <!--
+      <ConditionalAction Condition="inv_yes_no==True">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-IDINV</RunCommand>
+        </True>
+      </ConditionalAction>!-->
+    </True>
+  </ConditionalAction>
+  <!-- <ConditionalAction Condition="PNR_Cust_Code==AERLSRETL or PNR_Cust_Code==AERLCSHRTL">-->
+  <ConditionalAction Condition="PNR_Cust_Code==AERL74RTL or PNR_Cust_Code==AERLCSHRTL or PNR_Cust_Code==OMRETL or PNR_Cust_Code==QARLQRTL or PNR_Cust_Code==BHRRRETL or PNR_Cust_Code==AECZ30CB or PNR_Cust_Code==AECZ35CB or PNR_Cust_Code==AECZ44CB">
+    <True>
+      <QuestionsBlock WindowFormTitle="Common BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="211301ef-1306-4262-a250-58a18ea7ccb5" Designer="True">
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_4a92b5cc-01ba-4bca-9b20-fd2d63c8e32b" X="130" Y="30">Cash/Walkin Customer</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_0cf9220c-c7ae-44db-a976-0f6f73336c45" X="30" Y="80">Customer Code :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_5065d6fc-05ae-4f0d-8a09-630e3b51e3e6" X="30" Y="130">FOP :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ee37b8dd-a02a-4d9f-9ecc-bee38996b482" X="40" Y="230">Service Fee :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_831fa10d-f4b0-4af3-a070-86b6ac3a2187" X="270" Y="230">Extra Collection :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4b28fc22-51e7-4e7a-b78d-3d294d24ef27" X="290" Y="130">Booked  by :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="80">[temp_cust_code]</TextBox>
+        <ComboBox VarName="lpo_lpo" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="6" X="130" Y="130">
+          <ComboBoxItem>Cash</ComboBoxItem>
+          <ComboBoxItem>Credit Card</ComboBoxItem>
+          <ComboBoxItem>Payfort</ComboBoxItem>
+          <ComboBoxItem>Bank Transfer</ComboBoxItem>
+        </ComboBox>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="370" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="service_fee_sc1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="3" X="130" Y="230">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12345)" TabIndex="4" X="370" Y="230">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="477" Height="271" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_2129a6ba-aa8d-4e95-8bd7-c3a577ecb2dd" X="10" Y="10" />
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="5" X="370" Y="80" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_5065d6fc-05ae-4f0d-8a09-630e3b51e3e7" X="30" Y="165">Remark(REM) :</TextBlock>
+        <TextBox VarName="remark_remarks" Width="320" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="130" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_5065d6fc-05ae-4f0d-8a09-630e3b51e3e8" X="130" Y="190">ex. Payment Reference Number:</TextBlock>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="IsNotEmpty" Value="" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-REM[remark_remarks]+DI.FT-SC1[service_fee_sc1]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+      <ConditionalAction Condition="PNR_Cust_Code==AECZ30CB">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR30</RunCommand>
+          <Variable VarName="isSBRFound">true</Variable>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="PNR_Cust_Code==AECZ35CB">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR35</RunCommand>
+          <Variable VarName="isSBRFound">true</Variable>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="PNR_Cust_Code==AECZ44CB">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR44</RunCommand>
+          <Variable VarName="isSBRFound">true</Variable>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="PNR_Cust_Code==AERLCSHRTL">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR76</RunCommand>
+          <Variable VarName="isSBRFound">true</Variable>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="PNR_Cust_Code==AERL74RTL">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR74</RunCommand>
+          <Variable VarName="isSBRFound">true</Variable>
+        </True>
+      </ConditionalAction>
+      <!--
+      <ConditionalAction Condition="inv_yes_no==True">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-IDINV</RunCommand>
+        </True>
+      </ConditionalAction>!-->
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERG9ABY or PNR_Cust_Code==AERACMI or PNR_Cust_Code==AERGG9MKT or PNR_Cust_Code==AERG9OPER">
+    <True>
+      <QuestionsBlock WindowFormTitle="AIR ARABIA BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_87862619-b083-4f19-a79b-c47d58941ef5" X="330" Y="100">Department (DEP) :</TextBlock>
+        <TextBox VarName="dept_dep" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="440" Y="100">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_70610bb2-decd-49df-be99-6b7861913994" X="30" Y="150">Division (DIV) :</TextBlock>
+        <TextBox VarName="division_div" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="130" Y="150">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="157"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_1c0d321f-28e1-4858-874d-ecd8b54b44d9" X="330" Y="150">Designation(DGS) :</TextBlock>
+        <TextBox VarName="designation_dgs" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="440" Y="150">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="30" Y="200">Emp.ID (EMP) :</TextBlock>
+        <TextBox VarName="employee_id_emp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="130" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="310" Y="200">Type of Charges (TOC) :</TextBlock>
+        <ComboBox VarName="type_of_charges_toc" Width="100" ToolTip="select from drop-down list" ElementsList="Annual Leave,Duty Travel,Repatriation,Joining Tickets" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="440" Y="200">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="250">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="6" X="130" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="340" Y="250">Booked By(SET) :</TextBlock>
+        <ComboBox VarName="booked_by_set" Width="100" ToolTip="select Bookers' name from drop-down list" ElementsList="Manjula,Roshni" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="8" X="440" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="300">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="Select Service Fee amount from drop-down" ElementsList="150,100,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="9" X="130" Y="300"></ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="340">Extra  Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="10" X="130" Y="340">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="571" Height="385" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="100">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="100">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_217b0658-c877-4cfe-8e8c-89f7ad631675" X="240" Y="40">AIR ARABIA</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="11" IsSelected="True" X="440" Y="60" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b6" X="340" Y="340">Cost Center :</TextBlock>
+        <TextBox VarName="costcenter" Width="100" TabIndex="10" X="440" Y="340">
+          <ValidationRules>
+            <Require ErrorMessage="Cost Center is mandatory"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="otherservicefee" Width="100" TabIndex="12" X="440" Y="300"></TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="330" Y="300">Other Service Fee :</TextBlock>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERG9ABY" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="inv_yes_no" FieldType="CheckBox" Action="Hide">
+            <WhenCondition ConditionNumber="1" FieldName="customer_code_cust" FieldType="TextBox" FieldProperty="Value" FieldOperator="Equals" Value="AERACMI" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-DEP[dept_dep]+DI.FT-DIV[division_div]+DI.FT-DGS[designation_dgs]+DI.FT-EMP[employee_id_emp]+DI.FT-TOC[type_of_charges_toc]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-CCT[costcenter]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCSAIP7 or PNR_Cust_Code==AERCSAIP8 or PNR_Cust_Code==AERCSAIP3">
+    <True>
+      <QuestionsBlock WindowFormTitle="SAIPEM(UAE) BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBox VarName="trip_number_tnu" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="140" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_c1cbefce-41dc-44a9-9f0e-1599f2360bf0" X="30" Y="170">Trip Number(TNU) :</TextBlock>
+        <TextBox VarName="wbs_cost" Width="100" ToolTip="input WBS Cost" TabIndex="3" X="410" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_df84e15d-4f12-415c-ad62-ebe243b0f804" X="310" Y="130">WBS Cost :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="147"></TextBlock>
+        <TextBox VarName="cost_centre_cct" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="140" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a4" X="40" Y="130">Cost Centre(CCT) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="310" Y="90">Employee ID(EMP) :</TextBlock>
+        <TextBox VarName="employee_id_emp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="410" Y="90">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="310" Y="170">Type of Fare(TOF) :</TextBlock>
+        <ComboBox VarName="type_of_fare_tof" Width="100" ToolTip="select from drop-down list" ElementsList="LOW,PIE,NEG,SCO,SEA,INT,SBT" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="410" Y="170">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="40" Y="250">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="8" X="140" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="310" Y="250">Booked By(SET) :</TextBlock>
+        <ComboBox VarName="booked_by_set" Width="100" ToolTip="select Bookers' name from drop-down list" ElementsList="Elmer,Rosiline,Sami,Lehra,Maitha,Kamal" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="9" X="410" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="290">Service Fee :</TextBlock>
+        <TextBox VarName="service_fee_sc1" Width="100" ToolTip="Min 1 and Max 5 digits (no decimals)" TabIndex="10" X="140" Y="290">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Only numbers allowed!"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="310" Y="290">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="11" X="410" Y="290">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="520" Height="323" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="140" Y="87">[temp_cust_code]</TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e6" X="10" Y="210">Air Reason Code(ARC):</TextBlock>
+        <ComboBox VarName="air_reason_code_arc" Width="100" ToolTip="input Air Reason Code" ElementsList="TMA,UTD,REQ,RES,SEA" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="6" X="140" Y="210">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_09c2311b-b9ae-406e-a911-936521a030c4" X="300" Y="210">Policy Waived(BTT) :</TextBlock>
+        <ComboBox VarName="policy_waived_btt" Width="100" ToolTip="input Policy Waived" ElementsList="INP,FPO,SEA" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="7" X="410" Y="210">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_67348fcd-0077-48ac-9f49-fd1b1df688c4" X="240" Y="30">SAIPEM (UAE)</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="12" IsSelected="True" X="410" Y="50" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP7" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP8" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP3" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="QARCSAIP" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="5" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCSAIP1" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-EMP[employee_id_emp]+DI.FT-CCT[cost_centre_cct]+DI.FT-WBS[wbs_cost]+DI.FT-TNU[trip_number_tnu]+DI.FT-TOF[type_of_fare_tof]+DI.FT-ARC[air_reason_code_arc]+DI.FT-BTT[policy_waived_btt]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[service_fee_sc1]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==QARCSAIP">
+    <True>
+      <QuestionsBlock WindowFormTitle="SAIPEM(Qatar) BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBox VarName="trip_number_tnu" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="150" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_c1cbefce-41dc-44a9-9f0e-1599f2360bf0" X="30" Y="170">Trip Number(TNU) :</TextBlock>
+        <TextBox VarName="wbs_cost" Width="100" ToolTip="input WBS Cost" TabIndex="3" X="410" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_df84e15d-4f12-415c-ad62-ebe243b0f804" X="310" Y="130">WBS Cost(WBS) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="147"></TextBlock>
+        <TextBox VarName="cost_centre_cct" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="150" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a4" X="40" Y="130">Cost Centre(CCT) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="300" Y="90">Employee ID(EMP) :</TextBlock>
+        <TextBox VarName="employee_id_emp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="410" Y="90">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="300" Y="170">Type of Fare(TOF) :</TextBlock>
+        <ComboBox VarName="type_of_fare_tof" Width="100" ToolTip="select from drop-down list" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="410" Y="170">
+          <ComboBoxItem>LOW-Low Cost</ComboBoxItem>
+          <ComboBoxItem>PIE-Full</ComboBoxItem>
+          <ComboBoxItem>NEG-Negotitate/Corporate</ComboBoxItem>
+          <ComboBoxItem>SCO-Discounted</ComboBoxItem>
+          <ComboBoxItem>SEA-SEAMEN</ComboBoxItem>
+          <ComboBoxItem>INT-Integration</ComboBoxItem>
+          <ComboBoxItem>SBT-Self Booking Tool</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="40" Y="250">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="8" X="150" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="310" Y="250">Booked By(SET) :</TextBlock>
+        <ComboBox VarName="booked_by_set" Width="100" ToolTip="select Bookers' name from drop-down list" ElementsList="Elmer,Rosiline,Sami,Lehra,Maitha,Kamal" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="9" X="410" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="290">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="13" X="150" Y="290">
+          <ComboBoxItem>0.00</ComboBoxItem>
+          <ComboBoxItem>7.61</ComboBoxItem>
+          <ComboBoxItem>12.91</ComboBoxItem>
+          <ComboBoxItem>Other</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="40" Y="330">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="11" X="150" Y="330">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="522" Height="362" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="150" Y="90">[temp_cust_code]</TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e6" X="20" Y="210">Air Reason Code(ARC):</TextBlock>
+        <ComboBox VarName="air_reason_code_arc" Width="100" ToolTip="input Air Reason Code" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="6" X="150" Y="210">
+          <ComboBoxItem>TMA-Minimum Fare Applied</ComboBoxItem>
+          <ComboBoxItem>UTD-Only Available fare</ComboBoxItem>
+          <ComboBoxItem>REQ-Requested by PAX</ComboBoxItem>
+          <ComboBoxItem>RES=Proposed fare rejected</ComboBoxItem>
+          <ComboBoxItem>SEA=SEAMEN</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_09c2311b-b9ae-406e-a911-936521a030c4" X="300" Y="210">Policy Waived(BTT) :</TextBlock>
+        <ComboBox VarName="policy_waived_btt" Width="100" ToolTip="input Policy Waived" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="7" X="410" Y="210">
+          <ComboBoxItem>INP-In Policy</ComboBoxItem>
+          <ComboBoxItem>FPO-Out of Policy</ComboBoxItem>
+          <ComboBoxItem>SEA-SEAMEN</ComboBoxItem>
+        </ComboBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_67348fcd-0077-48ac-9f49-fd1b1df688c4" X="230" Y="30">SAIPEM (Qatar)</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="12" IsSelected="True" X="410" Y="50" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b6" X="300" Y="290">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="11" X="410" Y="290">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP7" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP8" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP3" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="QARCSAIP" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="5" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCSAIP1" ConditionOperator="Or" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <StringOperation Type="Substring" VarName="type_of_fare_tof_v">
+        <Source>[type_of_fare_tof]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="policy_waived_btt_v">
+        <Source>[policy_waived_btt]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="air_reason_code_arc_v">
+        <Source>[air_reason_code_arc]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-EMP[employee_id_emp]+DI.FT-CCT[cost_centre_cct]+DI.FT-WBS[wbs_cost]+DI.FT-TNU[trip_number_tnu]+DI.FT-TOF[type_of_fare_tof_v]+DI.FT-ARC[air_reason_code_arc_v]+DI.FT-BTT[policy_waived_btt_v]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==OMRCSAIP1">
+    <True>
+      <QuestionsBlock WindowFormTitle="SAIPEM(Oman) BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBox VarName="trip_number_tnu" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="139" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_c1cbefce-41dc-44a9-9f0e-1599f2360bf0" X="29" Y="170">Trip Number(TNU) :</TextBlock>
+        <TextBox VarName="wbs_cost" Width="100" ToolTip="input WBS Cost" TabIndex="3" X="409" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>OM03221310OFR</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_df84e15d-4f12-415c-ad62-ebe243b0f804" X="299" Y="130">WBS Cost (WBS) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="19" Y="147"></TextBlock>
+        <TextBox VarName="cost_centre_cct" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="139" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>9ON001</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a4" X="39" Y="130">Cost Centre(CCT) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="299" Y="90">Employee ID (EMP) :</TextBlock>
+        <TextBox VarName="employee_id_emp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="409" Y="90">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="299" Y="170">Type of Fare(TOF) :</TextBlock>
+        <ComboBox VarName="type_of_fare_tof" Width="100" ToolTip="select from drop-down list" Return="ValueKey" Display="ValueKey" SelectedItemIndex="2" TabIndex="5" X="409" Y="170">
+          <ComboBoxItem>LOW-Low Cost</ComboBoxItem>
+          <ComboBoxItem>PIE-Full</ComboBoxItem>
+          <ComboBoxItem>NEG-Negotitate/Corporate</ComboBoxItem>
+          <ComboBoxItem>SCO-Discounted</ComboBoxItem>
+          <ComboBoxItem>SEA-SEAMEN</ComboBoxItem>
+          <ComboBoxItem>INT-Integration</ComboBoxItem>
+          <ComboBoxItem>SBT-Self Booking Tool</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="39" Y="250">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="8" X="139" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="299" Y="250">Booked By(SET) :</TextBlock>
+        <ComboBox VarName="booked_by_set" Width="100" ToolTip="select Bookers' name from drop-down list" ElementsList="Elmer,Rosiline,Sami,Lehra,Maitha,Kamal" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="9" X="409" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="39" Y="290">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="13" X="139" Y="290">
+          <ComboBoxItem>0</ComboBoxItem>
+          <ComboBoxItem>1.36</ComboBoxItem>
+          <ComboBoxItem>0.80</ComboBoxItem>
+          <ComboBoxItem>Other</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="40" Y="330">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="11" X="140" Y="330">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="524" Height="361" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="39" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="139" Y="87">[temp_cust_code]</TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e6" X="19" Y="210">Air Reason Code(ARC):</TextBlock>
+        <ComboBox VarName="air_reason_code_arc" Width="100" ToolTip="input Air Reason Code" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="6" X="139" Y="210">
+          <ComboBoxItem>TMA-Minimum Fare Applied</ComboBoxItem>
+          <ComboBoxItem>UTD-Only Available fare</ComboBoxItem>
+          <ComboBoxItem>REQ-Requested by PAX</ComboBoxItem>
+          <ComboBoxItem>RES=Proposed fare rejected</ComboBoxItem>
+          <ComboBoxItem>SEA=SEAMEN</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_09c2311b-b9ae-406e-a911-936521a030c4" X="299" Y="210">Policy Waived(BTT):</TextBlock>
+        <ComboBox VarName="policy_waived_btt" Width="100" ToolTip="input Policy Waived" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="7" X="409" Y="210">
+          <ComboBoxItem>INP-In Policy</ComboBoxItem>
+          <ComboBoxItem>FPO-Out of Policy</ComboBoxItem>
+          <ComboBoxItem>SEA-SEAMEN</ComboBoxItem>
+        </ComboBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_67348fcd-0077-48ac-9f49-fd1b1df688c4" X="219" Y="30">SAIPEM (Oman)</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="12" IsSelected="True" X="409" Y="50" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b6" X="290" Y="290">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="11" X="410" Y="290">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP7" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP8" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSAIP3" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="QARCSAIP" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="5" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCSAIP1" ConditionOperator="Or" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <StringOperation Type="Substring" VarName="type_of_fare_tof_v">
+        <Source>[type_of_fare_tof]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="policy_waived_btt_v">
+        <Source>[policy_waived_btt]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="air_reason_code_arc_v">
+        <Source>[air_reason_code_arc]&gt;</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">3</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-EMP[employee_id_emp]+DI.FT-CCT[cost_centre_cct]+DI.FT-WBS[wbs_cost]+DI.FT-TNU[trip_number_tnu]+DI.FT-TOF[type_of_fare_tof_v]+DI.FT-ARC[air_reason_code_arc_v]+DI.FT-BTT[policy_waived_btt_v]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCSURV or PNR_Cust_Code==AERCSURD">
+    <True>
+      <QuestionsBlock WindowFormTitle="SURVITEC BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e8" X="20" Y="160">Car Reason Code(CRC) :</TextBlock>
+        <ComboBox VarName="car_reason_code_crc" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="3" TabIndex="21" X="150" Y="165">
+          <ComboBoxItem>AF-Agency Fare</ComboBoxItem>
+          <ComboBoxItem>CF-Survitech Fare</ComboBoxItem>
+          <ComboBoxItem>NA</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="157"></TextBlock>
+        <ComboBox VarName="air_reason_code_trc" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="3" TabIndex="21" X="150" Y="130">
+          <ComboBoxItem>AF-Agency Negotiated Fare</ComboBoxItem>
+          <ComboBoxItem>CF-Survitech Negotiated fare</ComboBoxItem>
+          <ComboBoxItem>LF=Lowest Logical Fare</ComboBoxItem>
+          <ComboBoxItem>IF-Inteliggent Fare</ComboBoxItem>
+          <ComboBoxItem>EX-Exchange Ticket</ComboBoxItem>
+          <ComboBoxItem>XX-Refund Ticket</ComboBoxItem>
+          <ComboBoxItem>NA</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e7" X="300" Y="130">Hotel Reason Code(HRC) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="300" Y="90">Reservation Type (RTY) :</TextBlock>
+        <ComboBox VarName="reservation_type_rtt" Width="100" ToolTip="select from drop-down" ElementsList="Online,Offline" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="1" X="440" Y="90">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="300" Y="170">Lowest Logical Fare(CAT) :</TextBlock>
+        <TextBox VarName="lowest_logical_fare_cat" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="440" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="300" Y="370">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="17" X="440" Y="370">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="40" Y="410">Booked By(SET) :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="16" X="150" Y="410">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="450">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="18" X="150" Y="450">
+          <ComboBoxItem>00-INVOL REISSUE</ComboBoxItem>
+          <ComboBoxItem>50-DOMESTIC INDIA PER TKT and Hotel</ComboBoxItem>
+          <ComboBoxItem>60-GCC REGIONAL  PER TKT</ComboBoxItem>
+          <ComboBoxItem>80-OTHER INTERNATIONAL PER TKT</ComboBoxItem>
+          <ComboBoxItem>30-REISSUE AND REFUND PER TKT</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="300" Y="450">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="19" X="440" Y="450">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="574" Height="485" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="150" Y="87">[temp_cust_code]</TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e6" X="20" Y="130">Air Reason Code(TRC) :</TextBlock>
+        <ComboBox VarName="hotel_reason_code_hrc" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="4" TabIndex="22" X="440" Y="130">
+          <ComboBoxItem>AF-Agency Negotiated Fare</ComboBoxItem>
+          <ComboBoxItem>CF-Survitech Negotiated Fare</ComboBoxItem>
+          <ComboBoxItem>GF-Global Star Rate</ComboBoxItem>
+          <ComboBoxItem>NA</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Height="33" Bold="False" VarName="SBAuto_TextBlock_de9fbb17-ef6e-46f0-9efe-52afc9fe635a" X="30" Y="200">Higher Fare(HFA) :</TextBlock>
+        <TextBox VarName="alternate_high_fare_hfa" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="150" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_5a88b885-0e17-4d65-80d1-ff8c1bcd7e7f" X="300" Y="200">Furthest Point (TAP) :</TextBlock>
+        <TextBox VarName="furthest_point_tap" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="440" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_10d069e9-8098-4e85-8ccb-8df75957e76e" X="40" Y="250">Department(DEP) :</TextBlock>
+        <ComboBox VarName="department_dep" Width="100" ToolTip="select from drop-down" ElementsList="SALES,OPERATIONS,FINANCE,CUSTOMER SERVICE" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="8" X="150" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6023165c-d7ea-4377-80f7-e30a125c48fa" X="300" Y="250">Division ID(OUN) :</TextBlock>
+        <ComboBox VarName="division_id_oun" Width="100" ToolTip="select from drop-down" ElementsList="MARINE,AERO SPACE,DEFENCE" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="9" X="440" Y="250">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_d47ee1c5-93b4-4c27-91d6-7f09d88f1aa0" X="40" Y="290">Task Number(TSK) :</TextBlock>
+        <ComboBox VarName="task_number_tsk" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="23" X="150" Y="290">
+          <ComboBoxItem>DD-Detached Duty</ComboBoxItem>
+          <ComboBoxItem>IM-Meeting</ComboBoxItem>
+          <ComboBoxItem>CA-Conference Attendance</ComboBoxItem>
+          <ComboBoxItem>IN-Interviews</ComboBoxItem>
+          <ComboBoxItem>PR-Performance Review</ComboBoxItem>
+          <ComboBoxItem>AT-Attend Training</ComboBoxItem>
+          <ComboBoxItem>DT-Deliver Training</ComboBoxItem>
+          <ComboBoxItem>HW-Home Worker</ComboBoxItem>
+          <ComboBoxItem>DS-Emergency disaster support</ComboBoxItem>
+          <ComboBoxItem>SP-Special Project</ComboBoxItem>
+          <ComboBoxItem>MEB-Meeting with external bodies</ComboBoxItem>
+          <ComboBoxItem>SV-Site Visit</ComboBoxItem>
+          <ComboBoxItem>TA-Technical Asistance</ComboBoxItem>
+          <ComboBoxItem>OA-Operational Activity</ComboBoxItem>
+          <ComboBoxItem>TM-Team Meeting</ComboBoxItem>
+          <ComboBoxItem>RW-Remote Worker</ComboBoxItem>
+          <ComboBoxItem>CV-Customer Visit</ComboBoxItem>
+          <ComboBoxItem>EE-External Exhibition</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_9463cbb6-61a8-4cb6-a731-698e35d9a4f2" X="300" Y="290">Country Location(LOC) :</TextBlock>
+        <ComboBox VarName="country_location_loc" Width="100" ElementsList="Fujairah,Dubai,Qatar,South Africa" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="26" X="440" Y="290">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_78beb5ca-2986-4d06-98b1-6f1deb8e2bc1" X="40" Y="330">Business Unit(CCT) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6bf0abb4-8c4e-4321-a5a0-bba968cec8b9" X="280" Y="410">Booker Email (BEA) :</TextBlock>
+        <TextBox VarName="booker_email_bea" Width="158" ToolTip="input Booker's email address (use @ the symbol)" TabIndex="13" X="390" Y="410">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="incorrect email address format!"><![CDATA[^[0-9A-Z -.]{1,20}[@][0-9A-Z .]{1,15}[.](COM|ORG|EDU|NET|GOV)$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_68347c0b-2f2b-4ced-a241-77f6b3ec2390" X="300" Y="330">Base Location(BLC) :</TextBlock>
+        <ComboBox VarName="base_location_blc" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="25" X="440" Y="330">
+          <ComboBoxItem>MEA</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_12a70aba-221a-406a-b45a-22395420a311" X="30" Y="370">Reason of Travel(TTP) :</TextBlock>
+        <ComboBox VarName="reason_of_travel_ttp" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="24" X="150" Y="370">
+          <ComboBoxItem>DD-Detached Duty</ComboBoxItem>
+          <ComboBoxItem>IM-Meeting</ComboBoxItem>
+          <ComboBoxItem>CA-Conference Attendance</ComboBoxItem>
+          <ComboBoxItem>IN-Interviews</ComboBoxItem>
+          <ComboBoxItem>PR-Performance Review</ComboBoxItem>
+          <ComboBoxItem>AT-Attend Training</ComboBoxItem>
+          <ComboBoxItem>DT-Deliver Training</ComboBoxItem>
+          <ComboBoxItem>HW-Home Worker</ComboBoxItem>
+          <ComboBoxItem>DS-Emergency disaster support</ComboBoxItem>
+          <ComboBoxItem>SP-Special Project</ComboBoxItem>
+          <ComboBoxItem>MEB-Meeting with external bodies</ComboBoxItem>
+          <ComboBoxItem>SV-Site Visit</ComboBoxItem>
+          <ComboBoxItem>TA-Technical Asistance</ComboBoxItem>
+          <ComboBoxItem>OA-Operational Activity</ComboBoxItem>
+          <ComboBoxItem>TM-Team Meeting</ComboBoxItem>
+          <ComboBoxItem>RW-Remote Worker</ComboBoxItem>
+          <ComboBoxItem>CV-Customer Visit</ComboBoxItem>
+          <ComboBoxItem>EE-External Exhibition</ComboBoxItem>
+        </ComboBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_f14610cd-2348-4a07-a5f5-45939c31cc5f" X="260" Y="30">SURVITEC</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="20" IsSelected="True" X="440" Y="50" />
+        <ComboBox VarName="business_unit_cct" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="27" X="150" Y="330">
+          <ComboBoxItem>Survitec Safety Solutions Norway AS - Fujairah Branch</ComboBoxItem>
+          <ComboBoxItem>Survitec Safety Equipment Trading and Installation LLC</ComboBoxItem>
+          <ComboBoxItem>Survitec Safety Marine Maintenance and Trading LLC</ComboBoxItem>
+          <ComboBoxItem>Survitec Safety Solutions South Africa </ComboBoxItem>
+        </ComboBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSURV" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSURD" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <StringOperation Type="Substring" VarName="air_reason_code_trc_v">
+        <Source>[air_reason_code_trc]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="hotel_reason_code_hrc_v">
+        <Source>[hotel_reason_code_hrc]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="car_reason_code_crc_v">
+        <Source>[car_reason_code_crc]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="task_number_tsk_v">
+        <Source>[task_number_tsk]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="reason_of_travel_ttp_v">
+        <Source>[reason_of_travel_ttp]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="service_fee_sc1_v">
+        <Source>[service_fee_sc1]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-RTY[reservation_type_rtt]+DI.FT-TRC[air_reason_code_trc_v]+DI.FT-HRC[hotel_reason_code_hrc_v]+DI.FT-CRC[car_reason_code_crc_v]+DI.FT-CAT[lowest_logical_fare_cat]+DI.FT-HFA[alternate_high_fare_hfa]+DI.FT-TAP[furthest_point_tap]</RunCommand>
+      <RunCommand StandardCommand="True">DI.FT-DEP[department_dep]+DI.FT-OUN[division_id_oun]+DI.FT-TSK[task_number_tsk_v]+DI.FT-LOC[country_location_loc]+DI.FT-CCT[business_unit_cct]+DI.FT-BLC[base_location_blc]+DI.FT-TTP[reason_of_travel_ttp_v]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[service_fee_sc1_v]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+      <StringOperation Type="Replace" VarName="email_str">
+        <Source>[booker_email_bea]</Source>
+        <Arguments>
+          <Argument Name="ReplaceFrom"><![CDATA[@]]></Argument>
+          <Argument Name="ReplaceTo"><![CDATA[//]]></Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-BEA[email_str]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCCSM">
+    <True>
+      <QuestionsBlock WindowFormTitle="CSM BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBox VarName="department_dep" Width="143" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="130" Y="150">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_c1cbefce-41dc-44a9-9f0e-1599f2360bf0" X="30" Y="150">Division(DEP):</TextBlock>
+        <TextBox VarName="client_name_oun" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="430" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_df84e15d-4f12-415c-ad62-ebe243b0f804" X="310" Y="120">Client Name(OUN) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="139"></TextBlock>
+        <TextBox VarName="project_code_prc" Width="142" ToolTip="Min 1 and Max 25 chars" TabIndex="2" X="130" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a4" X="20" Y="120">Project Code(PRC) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a3f9b63e-b78c-44f1-8012-3a6dfcc14eec" X="310" Y="90">Traveller Type(EPT) :</TextBlock>
+        <ComboBox VarName="traveller_type_ept" Width="100" ElementsList="Inhouse" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="1" X="430" Y="90">
+          <ComboBoxItem>Client</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_74f14f3d-e3d8-4a30-957b-839d436994e4" X="310" Y="150">Phase(SLD) :</TextBlock>
+        <TextBox VarName="svc_line_desc_sld" Width="195" ToolTip="Min 1 and Max 40 chars" TabIndex="5" X="430" Y="150">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="310" Y="270">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="11" X="430" Y="270">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="310" Y="210">Booked By(SET) :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="9" X="430" Y="210">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="240">Service Fee (SC1):</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="139" ToolTip="select from drop-down" ElementsList="95,35,65,80,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="10" X="130" Y="240">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="270">Extra Collection (EC):</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="12" X="170" Y="270">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="648" Height="351" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="90">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="90">[temp_cust_code]</TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_dd825354-5e31-479f-8b35-9b978ee4b0e6" X="30" Y="180">Task Number(TSK) :</TextBlock>
+        <TextBox VarName="task_number_tsk" Width="143" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="130" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_09c2311b-b9ae-406e-a911-936521a030c4" X="30" Y="210">Reser. Type(RTY) :</TextBlock>
+        <ComboBox VarName="reservation_type_rty" Width="140" ElementsList="Online" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="8" X="130" Y="210">
+          <ComboBoxItem>Offline</ComboBoxItem>
+        </ComboBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_e491f0f6-3d76-4239-8366-837d82120390" X="240" Y="32">CSM</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_1af7fa11-2b98-4d8f-87c4-61018b6f7c10" X="310" Y="180">Reason of Travel(TTP):</TextBlock>
+        <TextBox VarName="reason_of_travel_ttp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="430" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="13" IsSelected="True" X="400" Y="50" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b3" X="30" Y="300">Approver :</TextBlock>
+        <TextBox VarName="Approver" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="11" X="170" Y="310">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="300" Y="240">Other Service Fee:</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="11" X="430" Y="240"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCCSM" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-EPT[traveller_type_ept]+DI.FT-PRC[project_code_prc]+DI.FT-OUN[client_name_oun]+DI.FT-DEP[department_dep]+DI.FT-SLD[svc_line_desc_sld]+DI.FT-TSK[task_number_tsk]+DI.FT-APR[Approver]</RunCommand>
+      <RunCommand StandardCommand="True">DI.FT-RTY[reservation_type_rty]+DI.FT-TTP[reason_of_travel_ttp]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCOMAN">
+    <True>
+      <QuestionsBlock WindowFormTitle="OMAN INSURANCE BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBox VarName="savings_for_client_ss" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="400" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left balnk!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_df84e15d-4f12-415c-ad62-ebe243b0f804" X="280" Y="120">Saving for Client (SS):</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBox VarName="lowest_quoted_fare_lfa" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="130" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left balnk!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a4" X="20" Y="120">Lowest Fare (LFA) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="320" Y="170">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="4" X="400" Y="160">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left balnk!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="300" Y="240">Booked By :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="102" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="400" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left balnk!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="20" Y="200">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="30,0,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="130" Y="200">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="20" Y="250">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="6" X="130" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="538" Height="344" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="20" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="77">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="210" Y="30">OMAN INSURANCE</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="7" IsSelected="True" X="400" Y="80" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d6806c5-3f5d-4268-b238-acae84ab00a5" X="20" Y="155">Market Fare(MFA) :</TextBlock>
+        <TextBox VarName="market_quoted_fare_lfa" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="130" Y="155">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left balnk!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f1" X="300" Y="200">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="102" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="400" Y="200"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCOMAN" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-LFA[lowest_quoted_fare_lfa]+DI.FT-MFA[market_quoted_fare_lfa]+DI.FT-SS[savings_for_client_ss]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCHITA">
+    <True>
+      <QuestionsBlock WindowFormTitle="HITACHI BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="140">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="1" X="130" Y="140">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue>1220059206</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="300" Y="140">Booked By :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="400" Y="140">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="200">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="25,0,40,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="3" X="130" Y="200">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="240">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="4" X="130" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="529" Height="298" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="87">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="250" Y="40">HITACHI</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="5" IsSelected="True" X="400" Y="90" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b6" X="270" Y="190">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="4" X="400" Y="190"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCHITA" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCPCM">
+    <True>
+      <QuestionsBlock WindowFormTitle="PCM BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d0" X="30" Y="120">Traveller Last Name :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="390" Y="200">LPO :</TextBlock>
+        <TextBox VarName="lpo_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="6" X="430" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 15 chars"><![CDATA[^[0-9A-Z]{1,15}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="30" Y="200">Booked By :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="150" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="240">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="0,50,100,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="7" X="150" Y="240">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="290">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="8" X="150" Y="290">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="564" Height="341" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="150" Y="80">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="270" Y="40">PCM</TextBlock>
+        <TextBox VarName="traveller_last_name_last" Width="100" ToolTip="Min 1 and Max 20 chars" TabIndex="1" X="150" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 20 chars"><![CDATA[^[0-9A-Z]{1,20}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d1" X="300" Y="120">Traveller Given Name :</TextBlock>
+        <TextBox VarName="traveller_given_name_frst" Width="100" ToolTip="Min 1 and Max 20 chars" TabIndex="2" X="430" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 20 chars"><![CDATA[^[0-9A-Z]{1,20}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_0d08c7ba-093d-4a5f-b038-9f889ce1dcd5" X="30" Y="160">TAF Approver Name :</TextBlock>
+        <TextBox VarName="taf_approver_name_aprv" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="150" Y="160">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_0d08c7ba-093d-4a5f-b038-9f889ce1dcd6" X="310" Y="160">TAF Approver Date :</TextBlock>
+        <DatePicker VarName="taf_approver_date" Language="en" DateFormat="ddMMMyy" TabIndex="10" X="430" Y="160"></DatePicker>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="9" IsSelected="True" X="430" Y="80" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="320" Y="240">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" TabIndex="5" X="430" Y="240"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCPCM" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-LAST[traveller_last_name_last]+DI.FT-FRST[traveller_given_name_frst]+DI.FT-APRV[taf_approver_name_aprv]+DI.FT-DATE[taf_approver_date]+DI.FT-APR[Approver]+DI.FT-LPO[lpo_lpo]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCAPGS or [PNR_Cust_Code]==SARCACWA1">
+    <True>
+      <QuestionsBlock WindowFormTitle="ACWA POWER BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="95"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_302d91dd-8aab-4a9d-80b2-131bb0458460" X="30" Y="128">Department(DEP) :</TextBlock>
+        <TextBox VarName="department_code_dec" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="440" Y="128">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[DEC]</DefaultValue>
+        </TextBox>
+        <TextBox VarName="department_dep" Width="100" ToolTip="Min 1 and Max 20 chars" TabIndex="3" X="140" Y="128">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[PNR_DEP]</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_27de624b-a7e0-47c8-9218-7ca62fd15c1e" X="300" Y="128">Department Code (DEC) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="250">Service Fee (SC1) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="310" Y="250">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 8 chars (eg, 12345.00)" TabIndex="10" X="430" Y="250">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="552" Height="376" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="88">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="140" Y="88">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="250" Y="28">ACWA POWER</TextBlock>
+        <TextBox VarName="employee_id_emp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="140" Y="168">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[EMP]</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_65304a7a-9be4-4d70-a30f-0b3f9e156e2f" X="30" Y="168">Employee ID(EMP) :</TextBlock>
+        <TextBox VarName="request_id_lpo" Width="100" ToolTip="Min 1 and Max 15 chars" TabIndex="6" X="440" Y="168">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[LPO1]</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_360babfe-a500-48ae-9e41-9f85123d2741" X="310" Y="168">Request ID(LPO) :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="140" Y="208">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[SET]</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_1ed7f29b-eef3-4b2f-bd1d-fab8d25ec3a7" X="30" Y="208">Booked By (SET) :</TextBlock>
+        <TextBox VarName="charge_code_cct" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="8" X="440" Y="208">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue>[CCT]</DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a2dc4a9e-3ece-413d-ba52-a8f2b0ba7a1f" X="320" Y="208">Charge Code (CCT):</TextBlock>
+        <TextBlock Bold="True" VarName="SBAuto_TextBlock_33096692-61bf-4aad-8724-6caa76778c89" X="30" Y="328">Ticketing is not allowed without DI Entries.</TextBlock>
+        <ComboBox VarName="service_fee" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="19" X="140" Y="250">
+          <ComboBoxItem>40 -Online Economy </ComboBoxItem>
+          <ComboBoxItem>50-Online Business/First</ComboBoxItem>
+          <ComboBoxItem>60-OfflineEconomy </ComboBoxItem>
+          <ComboBoxItem>70-Offline Business/First</ComboBoxItem>
+          <ComboBoxItem>25 -Reissue Online Offline</ComboBoxItem>
+          <ComboBoxItem>50 -Online Hotel</ComboBoxItem>
+          <ComboBoxItem>70-Offline Hotel</ComboBoxItem>
+          <ComboBoxItem>40-Car Online</ComboBoxItem>
+          <ComboBoxItem>45-Offline Car</ComboBoxItem>
+          <ComboBoxItem>60-Online Bundled Air Hotel Car</ComboBoxItem>
+          <ComboBoxItem>90-Offline Bundled Air Hotel Car</ComboBoxItem>
+        </ComboBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="18" X="440" Y="88" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCAPGS" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="SARCACWA1" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <ArithmeticalOperation VarName="ec1" DecimalDigit="2">(([extra_collection_ec1]) /1.15)</ArithmeticalOperation>
+      <ConditionalAction Condition="PNR_DEP==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-DEP[department_dep]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="DEC==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-DEC[department_code_dec]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="EMP==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-EMP[employee_id_emp]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="CCT==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-CCT[charge_code_cct]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="LPO1==">
+        <True>
+          <ConditionalAction Condition="[PNR_Cust_Code]==SARCACWA1">
+            <True>
+              <RunCommand StandardCommand="True">DI.FT-LPO[request_id_lpo]</RunCommand>
+            </True>
+            <False>
+              <RunCommand StandardCommand="True">DI.FT-LPO[request_id_lpo]</RunCommand>
+            </False>
+          </ConditionalAction>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="SET==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SET[booked_by_set]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <StringOperation Type="IndexOf" VarName="service_fee_v">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="Type">First</Argument>
+          <Argument Name="SearchString"><![CDATA[-]]></Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="service_fee_a">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">[service_fee_v]</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-SC1[service_fee_a]</RunCommand>
+      <ConditionalAction Condition="[PNR_Cust_Code]==SARCACWA1">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-EC1[ec1]</RunCommand>
+        </True>
+        <False>
+          <RunCommand StandardCommand="True">DI.FT-EC1[extra_collection_ec1]</RunCommand>
+        </False>
+      </ConditionalAction>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCARTH">
+    <True>
+      <QuestionsBlock WindowFormTitle="ARTHUR D LITTLE BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="157"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="140">Charge Code (CHG):</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="310" Y="140">Booked  By :</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="390" Y="140">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="190">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="35,50,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="3" X="140" Y="190">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="230">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="4" X="140" Y="230">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="499" Height="278" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="87">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="87">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="15" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="220" Y="40">ARTHUR D LITTLE</TextBlock>
+        <TextBox VarName="charge_code_chg" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="140" Y="140">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="5" IsSelected="True" X="390" Y="90" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="280" Y="180">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" TabIndex="4" X="390" Y="180"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCARTH" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Visible">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-CHG[charge_code_chg]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCSOFT">
+    <True>
+      <QuestionsBlock WindowFormTitle="NOVENTIQ BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="130">Trip Purpose (TTP) :</TextBlock>
+        <TextBox VarName="trip_purpose_ttp" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="130" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="300" Y="130">Booked By :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="180">Service Fee :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="50,75,100,30,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="3" X="130" Y="180">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="30" Y="220">Extra Collection :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="4" X="130" Y="220">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="524" Height="282" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="77">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="130" Y="77">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="14" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="240" Y="30">NOVENTIQ</TextBlock>
+        <TextBox VarName="booked_by_set" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="380" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[A-Z\s]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto-invoicing?" TabIndex="5" IsSelected="True" X="380" Y="50" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_9a041a9c-a3e9-416c-abe7-1c895fa29429" X="300" Y="80">Approver</TextBlock>
+        <ComboBox VarName="app" Width="100" ElementsList="Jordana Joshua,Louise Ford,Darina Ivanova,Anastasiya Meshkova,Shalmi Dias" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="6" X="380" Y="80">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="270" Y="170">Other Service Fee :</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="4" X="380" Y="170"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCSOFT" ConditionOperator="Blank" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Hide">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-TTP[trip_purpose_ttp]+DI.FT-SET[booked_by_set]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]+DI.FT-APRV[app]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCCRS1 or PNR_Cust_Code==AERCCRS2">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d0" X="30" Y="120">Project Code(PRC) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="160">Purchase Order(LPO) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_58fa523c-7e76-4040-9b6c-8646913ef413" X="330" Y="200">Location  Code(LC) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_a1973899-2206-4b56-a199-b694464668f0" X="30" Y="200">Booked By(SET) :</TextBlock>
+        <ComboBox VarName="booked_by_set" Width="100" ToolTip="select from drop-down" ElementsList="Elizabeth,Desiree,Shilesh,Nadia" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="150" Y="200">
+          <ComboBoxItem></ComboBoxItem>
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="240">Service Fee(SC1) :</TextBlock>
+        <ComboBox VarName="service_fee_sc1" Width="100" ToolTip="select from drop-down" ElementsList="0,35,50,75,120,Other" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="7" X="150" Y="240">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="20" Y="280">Extra Collection(EC1) :</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="8" X="150" Y="280">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="551" Height="327" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="150" Y="80">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="240" Y="30">CONTROL RISK</TextBlock>
+        <TextBox VarName="project_code_prc" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="150" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d1" X="290" Y="120">Billable/Non-Billable(RTY) :</TextBlock>
+        <ComboBox VarName="billable_non-billable_rty" Width="100" ToolTip="select from drop-down" ElementsList="Billable,Non-Billable" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="2" X="440" Y="120">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_0d08c7ba-093d-4a5f-b038-9f889ce1dcd5" X="260" Y="160">Rotational/Non-Rotational (TTP) :</TextBlock>
+        <ComboBox VarName="rotational_non-rotational_ttp" Width="100" ToolTip="select from drop-down" ElementsList="Rotational,Non-Rotational" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="4" X="440" Y="160">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBox VarName="location_code_lc" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="440" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="purchase_order_lpo" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="3" X="150" Y="160">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="9" IsSelected="True" X="440" Y="80" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="330" Y="240">Other Service Fee:</TextBlock>
+        <TextBox VarName="otherservicefee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="8" X="440" Y="240"></TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCCRS1" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCCRS2" ConditionOperator="Or" />
+          </FieldBehaviour>
+          <FieldBehaviour FieldName="otherservicefee" FieldType="TextBox" Action="Enable">
+            <WhenCondition ConditionNumber="1" FieldName="service_fee_sc1" FieldType="ComboBox" FieldProperty="Element" FieldOperator="Equals" Value="Other" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <Variable VarName="serviceFee">0</Variable>
+      <ConditionalAction Condition="service_fee_sc1==Other">
+        <True>
+          <Variable VarName="serviceFee">[otherservicefee]</Variable>
+        </True>
+        <False>
+          <Variable VarName="serviceFee">[service_fee_sc1]</Variable>
+        </False>
+      </ConditionalAction>
+      <RunCommand StandardCommand="True">DI.FT-PRC[project_code_prc]+DI.FT-RTY[billable_non-billable_rty]+DI.FT-LPO[purchase_order_lpo]+DI.FT-TTP[rotational_non-rotational_ttp]+DI.FT-SET[booked_by_set]+DI.FT-LC[location_code_lc]+DI.FT-SC1[serviceFee]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==AERCAMER1 or PNR_Cust_Code==AERCAMER2 or PNR_Cust_Code==AERCAMER3">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="10" Y="147"></TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d0" X="30" Y="120">COST CENTRE (CCT) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6396c24c-c873-480e-8d57-31442b53a7b2" X="30" Y="160">TRIP Reason :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_58fa523c-7e76-4040-9b6c-8646913ef413" X="290" Y="160">LPO :</TextBlock>
+        <TextBox VarName="service_fee" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="8" X="150" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue>25</DefaultValue>
+        </TextBox>
+        <ComboBox VarName="trip_reason" Width="100" ToolTip="select from drop-down" ElementsList="BT-BUSINESS TRIP,VL-VACATION LEAVE,EOS-END OF SERVICE,NH-New Hiring" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="5" X="150" Y="160">
+          <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="30" Y="200">Service Fee(SC1) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="290" Y="200">Extra Collection(EC1) :</TextBlock>
+        <TextBox VarName="extra_collection_ec" Width="100" ToolTip="Min 1 and Max 5 numeric chars (eg. 12500)" TabIndex="8" X="440" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 5 numeric chars"><![CDATA[^[0-9]{1,5}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <GroupBox HeaderName="" Width="549" Height="278" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="30" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="150" Y="80">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="140" Y="30">AMERICANA LLC Common Script</TextBlock>
+        <TextBox VarName="cost_center_cct" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="150" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d1" X="290" Y="120">EMP/FILE NO :</TextBlock>
+        <TextBox VarName="emp_file_number" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="440" Y="120">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="lpo" Width="100" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="440" Y="160">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+            <RegEx ErrorMessage="Min 1 and Max 10 chars"><![CDATA[^[0-9A-Z]{1,10}$]]></RegEx>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="9" IsSelected="True" X="440" Y="80" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCAMER1" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCAMER2" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCAMER3" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <StringOperation Type="Substring" VarName="trip_reason_v">
+        <Source>[trip_reason]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">2</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-CCT[cost_center_cct]+DI.FT-EMP[emp_file_number]+DI.FT-TTP[trip_reason_v]+DI.FT-LPO[lpo]+DI.FT-SC1[service_fee]+DI.FT-EC1[extra_collection_ec]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==BHRCASPE or PNR_Cust_Code==OMRCASPE">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="137"></TextBlock>
+        <TextBox VarName="REM" Width="379" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="160" Y="150">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="ec" Width="77" ToolTip="Min 1 and Max 10 chars" TabIndex="9" X="430" Y="200">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="LPO1" Width="91" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="450" Y="110">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="330" Y="110">Form of Payment :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="190">Service Fee(SC1) :</TextBlock>
+        <TextBox VarName="SC1" Width="91" ToolTip="Min 1 and Max 10 chars" TabIndex="8" X="160" Y="190">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="290" Y="200">Extra Collection(EC1) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d3" X="40" Y="110">Requested by :</TextBlock>
+        <GroupBox HeaderName="" Width="549" Height="278" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="70">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="160" Y="70">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="220" Y="20">Aspentech</TextBlock>
+        <TextBox VarName="SET" Width="137" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="160" Y="110">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13151" X="40" Y="150">Remark :</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="1" X="450" Y="70" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="BHRCASPE" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-SET[SET]+DI.FT-LPO[LPO1]+DI.FT-REM[REM]+DI.FT-SC1[SC1]+DI.FT-EC1[ec]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="PNR_Cust_Code==BHRCTDL2 or PNR_Cust_Code==OMRCTDL1">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="147"></TextBlock>
+        <TextBox VarName="REM" Width="189" TabIndex="3" X="150" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="ec" Width="77" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="410" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="LPO1" Width="111" ToolTip="Min 1 and Max 10 chars" TabIndex="2" X="430" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="300" Y="130">Form of Payment(LPO) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="240">Service Fee(SC1) :</TextBlock>
+        <TextBox VarName="SC1" Width="91" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="160" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="290" Y="240">Extra Collection(EC1) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d3" X="40" Y="130">Requested by(SET) :</TextBlock>
+        <GroupBox HeaderName="" Width="549" Height="278" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="160" Y="80">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="220" Y="30">ENSIGN</TextBlock>
+        <TextBox VarName="SET" Width="129" ToolTip="Min 1 and Max 10 chars" TabIndex="1" X="160" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13151" X="40" Y="180">Remark(REM) :</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="1" IsSelected="True" X="450" Y="80" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13152" X="350" Y="170">Emp No.(EMP) :</TextBlock>
+        <TextBox VarName="empno" Width="109" ToolTip="Min 1 and Max 10 chars" TabIndex="4" X="430" Y="170">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="BHRCTDL2" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCTDL1" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-SET[SET]+DI.FT-LPO[LPO1]+DI.FT-REM[REM]+DI.FT-EMP[empno]+DI.FT-SC1[SC1]+DI.FT-EC1[ec]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <!--<ConditionalAction Condition="PNR_Cust_Code==AERCPETR4 or PNR_Cust_Code==AERCPETR6 or PNR_Cust_Code==AERCPETR28 or PNR_Cust_Code==KWRCPETR13 or PNR_Cust_Code==OMRCPETR1 or PNR_Cust_Code==OMRCPETR3">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True"><TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="30" Y="147"></TextBlock><TextBox VarName="cat" Width="109" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="170" Y="170"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBox VarName="ec" Width="113" ToolTip="Min 1 and Max 10 chars" TabIndex="9" X="440" Y="300"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBox VarName="tval" Width="111" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="440" Y="130"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="290" Y="130">Total Booked Value(TVAL) :</TextBlock><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="60" Y="300">Service Fee(SC1) :</TextBlock><TextBox VarName="sc" Width="111" ToolTip="Min 1 and Max 10 chars" TabIndex="8" X="170" Y="300"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="320" Y="300">Retention (EC1) :</TextBlock><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13152" X="40" Y="130">Air Reason Code(TRC):</TextBlock><GroupBox HeaderName="" Width="567" Height="401" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" /><TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="50" Y="80">Customer Code :</TextBlock><TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="170" Y="80">[temp_cust_code]</TextBox><TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="230" Y="30">Petrofac</TextBlock><ComboBox VarName="trc" Width="108" ElementsList="LF,AF,PF,CF,LC,PR,EX" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="10" X="170" Y="130"><ComboBoxItem></ComboBoxItem></ComboBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13151" X="30" Y="170">Lowest Logical Fare(CAT) :</TextBlock><CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="1" IsSelected="True" X="460" Y="80" /><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13153" X="290" Y="170">Second Code (SECQ) :</TextBlock><TextBox VarName="secq" Width="113" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="440" Y="170"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13154" X="60" Y="210">Third Code (THIQ) :</TextBlock><TextBox VarName="thiq" Width="110" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="170" Y="210"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13155" X="310" Y="210">Higher Fare(HFA):</TextBlock><TextBox VarName="hfa" Width="113" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="440" Y="205"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13156" X="340" Y="260">LPO(LPO1) :</TextBlock><TextBox VarName="lpo" Width="113" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="440" Y="260"><ValidationRules><Require ErrorMessage="Field cannot be left blank!"></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13157" X="10" Y="250">Offline Reason Code (RFO) :</TextBlock><ComboBox VarName="rfo" Width="108" ElementsList="MUL, CON" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="10" X="170" Y="250"><ComboBoxItem></ComboBoxItem></ComboBox><FieldBehaviours><FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable"><WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCPETR4" ConditionOperator="Blank" /><WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCPETR6" ConditionOperator="Or" /><WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCPETR28" ConditionOperator="Or" /><WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="KWRCPETR13" ConditionOperator="Or" /><WhenCondition ConditionNumber="5" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCPETR1" ConditionOperator="Or" /><WhenCondition ConditionNumber="6" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="OMRCPETR3" ConditionOperator="Or" /></FieldBehaviour></FieldBehaviours></QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-TRC[trc]+DI.FT-TVAL[tval]+DI.FT-CAT[cat]+DI.FT-SECQ[secq]+DI.FT-THIQ[thiq]+DI.FT-HFA[hfa]+DI.FT-EC1[ec]+DI.FT-SC1[sc]+DI.FT-LPO1[lpo]+DI.FT-RFO[rfo]</RunCommand>
+    </True>
+  </ConditionalAction>-->
+  <ConditionalAction Condition="PNR_Cust_Code==QARCHITA">
+    <True>
+      <QuestionsBlock WindowFormTitle="CONTROL RISK BOS DATA CAPTURE WINDOW" SubmitButtonName="SUBMIT" WindowId="8c02908f-552f-4fc6-a38d-4b561e383623" Designer="True">
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_6c165157-bbdb-4a3b-a134-83927ba1e383" X="20" Y="147"></TextBlock>
+        <TextBox VarName="REM" Width="379" ToolTip="Min 1 and Max 10 chars" TabIndex="7" X="160" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="ec" Width="77" ToolTip="Min 1 and Max 10 chars" TabIndex="9" X="410" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBox VarName="LPO1" Width="111" ToolTip="Min 1 and Max 10 chars" TabIndex="6" X="430" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13150" X="310" Y="130">Form of Payment :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13149" X="40" Y="240">Service Fee(SC1) :</TextBlock>
+        <TextBox VarName="SC1" Width="91" ToolTip="Min 1 and Max 10 chars" TabIndex="8" X="160" Y="240">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_4d8f6900-62fe-4339-b83c-78492ac4b9b5" X="290" Y="240">Extra Collection(EC1) :</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_98b21849-5cf6-4233-a781-3edf04b785d3" X="40" Y="130">Requested by :</TextBlock>
+        <GroupBox HeaderName="" Width="549" Height="278" BackgroundColor="#FFFDEADA" VarName="SBAuto_GroupBox_62e25732-a93b-4ccd-bdb7-a28cc3ff0a28" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_2efcabca-3175-4be4-ba00-3314342bb662" X="40" Y="80">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="160" Y="80">[temp_cust_code]</TextBox>
+        <TextBlock FontSize="16" Bold="True" VarName="SBAuto_TextBlock_f2ed59e8-64df-48d6-82de-b58f558ded70" X="220" Y="30">Hitachi</TextBlock>
+        <TextBox VarName="SET" Width="129" ToolTip="Min 1 and Max 10 chars" TabIndex="5" X="160" Y="130">
+          <ValidationRules>
+            <Require ErrorMessage="Field cannot be left blank!"></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_ac6cbfba-d631-42a4-be79-4919d8a13151" X="40" Y="180">Remark :</TextBlock>
+        <CheckBox VarName="inv_yes_no" Label="Auto Invoicing?" TabIndex="1" IsSelected="True" X="450" Y="80" />
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="QARCHITA" ConditionOperator="Blank" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <RunCommand StandardCommand="True">DI.FT-SET[SET]+DI.FT-LPO1[LPO1]+DI.FT-REM[REM]+DI.FT-SC1[SC1]+DI.FT-EC1[ec]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="[PNR_Cust_Code]==AERCEPAM11 or [PNR_Cust_Code]==AERCEPAM22 or [PNR_Cust_Code]==AERCEPAM33 or [PNR_Cust_Code]==AERCEPAM44">
+    <True>
+      <QuestionsBlock SubmitButtonName="SUBMIT" WindowId="8390ecdd-7a11-4f89-be4b-196c9a839005" Designer="True">
+        <GroupBox HeaderName="" Width="549" Height="221" BackgroundColor="#FFFCD5B5" VarName="SBAuto_GroupBox_d745fb05-8be3-4f6c-9cc7-ae218b4dcb2a" X="10" Y="10" />
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_221dbb99-47eb-476a-b1a3-98d17585c54f" X="270" Y="70">Net Paid to supplier(AED) :</TextBlock>
+        <TextBox VarName="netval" Width="100" TabIndex="0" X="420" Y="70">
+          <ValidationRules>
+            <Require ErrorMessage=""></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e" X="30" Y="100">Remark :</TextBlock>
+        <TextBox VarName="rem" Width="340" TabIndex="0" X="160" Y="110">
+          <ValidationRules>
+            <Require ErrorMessage=""></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e1" X="30" Y="140">Service Fee(SC1):</TextBlock>
+        <ComboBox VarName="service_fee" Width="100" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="1" X="160" Y="140">
+          <ComboBoxItem>30-Online Air All</ComboBoxItem>
+          <ComboBoxItem>30-Online Hotel</ComboBoxItem>
+          <ComboBoxItem>30-Online Car</ComboBoxItem>
+          <ComboBoxItem>40-RE ISSUE Air</ComboBoxItem>
+          <ComboBoxItem>40-Bundled LCC</ComboBoxItem>
+          <ComboBoxItem>45-Bundled Regional </ComboBoxItem>
+          <ComboBoxItem>66-Bundled International </ComboBoxItem>
+          <ComboBoxItem>45-Offline Regional Air </ComboBoxItem>
+          <ComboBoxItem>66-Offline International Air</ComboBoxItem>
+          <ComboBoxItem>40-Online LCC Air</ComboBoxItem>
+          <ComboBoxItem>50-Offline Hotel</ComboBoxItem>
+          <ComboBoxItem>50-Offline Car</ComboBoxItem>
+          <ComboBoxItem>50-Offline Train </ComboBoxItem>
+        </ComboBox>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e2" X="30" Y="180">Extra Collection (EC1):</TextBlock>
+        <TextBox VarName="extra_collection_ec1" Width="100" TabIndex="0" X="160" Y="180">
+          <ValidationRules>
+            <Require ErrorMessage=""></Require>
+          </ValidationRules>
+          <DefaultValue></DefaultValue>
+        </TextBox>
+        <TextBlock Height="28" FontSize="20" Bold="True" VarName="SBAuto_TextBlock_08816d64-268b-4b2c-9c65-632deccd3757" X="170" Y="30">EPAM</TextBlock>
+        <TextBlock Bold="False" VarName="SBAuto_TextBlock_221dbb99-47eb-476a-b1a3-98d17585c54f1" X="30" Y="71">Customer Code :</TextBlock>
+        <TextBox VarName="customer_code_cust" Width="100" TabIndex="0" X="160" Y="71">
+          <ValidationRules>
+            <Require ErrorMessage=""></Require>
+          </ValidationRules>
+          <DefaultValue>[temp_cust_code]</DefaultValue>
+        </TextBox>
+        <FieldBehaviours>
+          <FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable">
+            <WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM11" ConditionOperator="Blank" />
+            <WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM22" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM33" ConditionOperator="Or" />
+            <WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM44" ConditionOperator="Or" />
+          </FieldBehaviour>
+        </FieldBehaviours>
+      </QuestionsBlock>
+      <StringOperation Type="IndexOf" VarName="service_fee_v">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="Type">First</Argument>
+          <Argument Name="SearchString"><![CDATA[-]]></Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="service_fee_a">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">[service_fee_v]</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-NVAL[netval]+DI.FT-REM[rem]+DI.FT-SC1[service_fee_a]+DI.FT-EC1[extra_collection_ec1]</RunCommand>
+    </True>
+  </ConditionalAction>
+  <!--<ConditionalAction Condition="[PNR_Cust_Code]==SARCACWA1">
+    <True>
+      <QuestionsBlock SubmitButtonName="SUBMIT" WindowId="8390ecdd-7a11-4f89-be4b-196c9a839005" Designer="True"><GroupBox HeaderName="" Width="648" Height="440" BackgroundColor="#FFFCD5B5" VarName="SBAuto_GroupBox_d745fb05-8be3-4f6c-9cc7-ae218b4dcb2a" X="10" Y="10" /><TextBox VarName="DEP" Width="129" TabIndex="1" X="500" Y="110"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[PNR_DEP]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf" X="380" Y="110">DEPARTMENT(DEP):</TextBlock><TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e" X="30" Y="110">BUSINESS_LINE(SLD) :</TextBlock><TextBox VarName="SLD" Width="129" TabIndex="0" X="200" Y="110"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e1" X="30" Y="370">Service Fee(SC1):</TextBlock><ComboBox VarName="service_fee" Width="121" Return="ValueKey" Display="ValueKey" SelectedItemIndex="1" TabIndex="17" X="200" Y="370"><ComboBoxItem>40-Online Economy</ComboBoxItem><ComboBoxItem>50-Online Business/First</ComboBoxItem><ComboBoxItem>60-Offline Economy</ComboBoxItem><ComboBoxItem>70-Offline Business/First</ComboBoxItem><ComboBoxItem>25-Reissue Online Offline</ComboBoxItem><ComboBoxItem>50-Online Hotel</ComboBoxItem><ComboBoxItem>70-Offline Hotel</ComboBoxItem><ComboBoxItem>40-Car Online</ComboBoxItem><ComboBoxItem>45-Offline Car</ComboBoxItem><ComboBoxItem>60-Online Bundled Air Hotel Car</ComboBoxItem><ComboBoxItem>90-Offline Bundled Air Hotel Car</ComboBoxItem></ComboBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_53445ce9-f226-4b4a-a800-49d366a0fd1e2" X="400" Y="370">Retention (EC1):</TextBlock><TextBox VarName="extra_collection_ec1" Width="129" TabIndex="16" X="500" Y="370"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Height="28" FontSize="20" Bold="True" VarName="SBAuto_TextBlock_08816d64-268b-4b2c-9c65-632deccd3757" X="190" Y="30">ACWA Power KSA</TextBlock><TextBlock Bold="False" VarName="SBAuto_TextBlock_221dbb99-47eb-476a-b1a3-98d17585c54f1" X="30" Y="71">Customer Code :</TextBlock><TextBox VarName="customer_code_cust" Width="133" TabIndex="0" X="200" Y="70"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[temp_cust_code]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf1" X="30" Y="140">DEPARTMENT Code (DEC):</TextBlock><TextBox VarName="DEC_a" Width="129" TabIndex="2" X="200" Y="140"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[DEC]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf2" X="420" Y="140">Entity (LEM):</TextBlock><TextBox VarName="LEM" Width="129" TabIndex="3" X="500" Y="140"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf3" X="30" Y="170">Charge Code (CCT):</TextBlock><TextBox VarName="CCT_a" Width="129" TabIndex="4" X="200" Y="170"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[CCT]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf4" X="410" Y="170">Region(OUN):</TextBlock><TextBox VarName="OUN" Width="129" TabIndex="5" X="500" Y="170"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f74" X="30" Y="200">Employee Number(EMP) :</TextBlock><TextBox VarName="EMP_a" Width="129" TabIndex="6" X="200" Y="200"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[EMP]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_d1bfbf2d-ee80-407b-8d3e-68635db67bcf5" X="360" Y="200">Business Purpose (BTT):</TextBlock><TextBox VarName="BTT" Width="129" TabIndex="7" X="500" Y="200"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f75" X="30" Y="230">LPO:</TextBlock><TextBox VarName="LPO_a" Width="129" TabIndex="8" X="200" Y="230"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[LPO1]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f76" X="390" Y="230">Booked By (SET):</TextBlock><TextBox VarName="SET_a" Width="129" TabIndex="9" X="500" Y="230"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue>[SET]</DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f77" X="30" Y="260">Air Reason Code (ARC):</TextBlock><TextBox VarName="ARC" Width="129" TabIndex="10" X="200" Y="260"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f78" X="400" Y="260">Best Fare (CAT) :</TextBlock><TextBox VarName="CAT" Width="129" TabIndex="11" X="500" Y="260"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f79" X="30" Y="295">Grade (DES):</TextBlock><TextBox VarName="DES" Width="129" TabIndex="12" X="200" Y="295"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f80" X="380" Y="290">Project Code (PRC):</TextBlock><TextBox VarName="PRC" Width="129" TabIndex="13" X="500" Y="290"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock Bold="False" VarName="SBAuto_TextBlock_bd5f84fa-bf84-44c2-91de-db38b0e52f81" X="30" Y="330">Location (LOC):</TextBlock><TextBox VarName="LOC" Width="129" TabIndex="14" X="200" Y="330"><ValidationRules><Require ErrorMessage=""></Require></ValidationRules><DefaultValue></DefaultValue></TextBox><TextBlock FontColor="#FFC00000" Bold="False" VarName="SBAuto_TextBlock_b99ca25c-3089-43f1-b1c3-df93ea5fd19d" X="30" Y="410">Ticketing NOT allowed without DI entries</TextBlock><FieldBehaviours><FieldBehaviour FieldName="customer_code_cust" FieldType="TextBox" Action="Disable"><WhenCondition ConditionNumber="1" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM11" ConditionOperator="Blank" /><WhenCondition ConditionNumber="2" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM22" ConditionOperator="Or" /><WhenCondition ConditionNumber="3" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM33" ConditionOperator="Or" /><WhenCondition ConditionNumber="4" FieldName="temp_cust_code" FieldType="Variable" FieldProperty="Value" FieldOperator="Equals" Value="AERCEPAM44" ConditionOperator="Or" /></FieldBehaviour></FieldBehaviours></QuestionsBlock>
+      
+      
+      <ConditionalAction Condition="PNR_DEP==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-DEP[DEP]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="DEC==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-DEC[DEC_a]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="EMP==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-EMP[EMP_a]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="CCT==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-CCT[CCT_a]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="LPO1==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-LPO[LPO]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="SET==">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SET[SET_a]</RunCommand>
+        </True>
+      </ConditionalAction>
+      <StringOperation Type="IndexOf" VarName="service_fee_v">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="Type">First</Argument>
+          <Argument Name="SearchString"><![CDATA[-]]></Argument>
+        </Arguments>
+      </StringOperation>
+      <StringOperation Type="Substring" VarName="service_fee_a">
+        <Source>[service_fee]</Source>
+        <Arguments>
+          <Argument Name="StartFrom">0</Argument>
+          <Argument Name="Length">[service_fee_v]</Argument>
+        </Arguments>
+      </StringOperation>
+      <RunCommand StandardCommand="True">DI.FT-SLD[SLD]+DI.FT-LEM[LEM]+DI.FT-OUN[OUN]+DI.FT-BTT[BTT]+DI.FT-ARC[ARC]+DI.FT-CAT[CAT]+DI.FT-DES[DES]+DI.FT-PRC[PRC]+DI.FT-LOC[LOC]+DI.FT-SC1[service_fee_a]+DI.FT-EC1[extra_collection_ec1]
 
+      </RunCommand>
+    </True>
+  </ConditionalAction>-->
+  <ConditionalAction Condition="isSBRFound==false">
+    <True>
+      <ConditionalAction Condition="PCC==31CA or PCC==38NI or PCC==668W or  PCC==8U7S">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR74</RunCommand>
+        </True>
+      </ConditionalAction>
+      <ConditionalAction Condition="PCC==6ON4">
+        <True>
+          <RunCommand StandardCommand="True">DI.FT-SBR76</RunCommand>
+        </True>
+      </ConditionalAction>
+    </True>
+  </ConditionalAction>
+  <ConditionalAction Condition="inv_yes_no==True and isSDGFound==">
+    <True>
+      <RunCommand StandardCommand="True">DI.FT-IDINV</RunCommand>
+    </True>
+  </ConditionalAction>
+</ButtonConf>
